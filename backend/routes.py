@@ -14,6 +14,9 @@ def get_db():
         yield db
     finally:
         db.close()
+@app.get("/")
+async def root():
+    return {"message": "Welcome to KiranaPulse!"}
 
 @router.post("/products/", response_model=schemas.Product)
 def create_product(product: schemas.ProductCreate, db: Session = Depends(get_db)):
