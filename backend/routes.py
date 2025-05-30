@@ -14,7 +14,7 @@ def get_db():
         yield db
     finally:
         db.close()
-@app.get("/")
+@router.get("/")
 async def root():
     return {"message": "Welcome to KiranaPulse!"}
 
