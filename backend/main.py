@@ -12,6 +12,7 @@ app = FastAPI(title="Grocery Tracker API")
 # Add CORS middleware so frontend can access backend
 origins = [
     "http://localhost:3000",  # React dev server origin
+    "https://kiranapulse.netlify.app/",  # Production frontend origin
 ]
 
 app.add_middleware(

@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
-import {
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 
 const SalesEntry = () => {
   const [products, setProducts] = useState([]);
@@ -18,16 +9,6 @@ const SalesEntry = () => {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ type: "", message: "" });
   const navigate = useNavigate();
-
-  // Date range states for report
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-
-  // Aggregated sales data for chart
-  const [chartData, setChartData] = useState([]);
-
-  // Show or hide report section
-  const [showReport, setShowReport] = useState(false);
 
   useEffect(() => {
     async function loadInitialData() {
@@ -111,40 +92,6 @@ const SalesEntry = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  // Fetch filtered sales and prepare chart data
-  const loadReport = () => {
-    if (!fromDate || !toDate) {
-      showAlert("error", "Please select both From and To dates.");
-      return;
-    }
-    if (new Date(fromDate) > new Date(toDate)) {
-      showAlert("error", "'From' date cannot be after 'To' date.");
-      return;
-    }
-
-    // Filter sales by date range
-    const filteredSales = sales.filter((s) => {
-      const saleDate = new Date(s.date);
-      return saleDate >= new Date(fromDate) && saleDate <= new Date(toDate);
-    });
-
-    // Aggregate sales by day
-    const aggregate = {};
-
-    filteredSales.forEach((s) => {
-      const dateKey = new Date(s.date).toISOString().split("T")[0]; // yyyy-mm-dd
-      if (!aggregate[dateKey]) aggregate[dateKey] = 0;
-      aggregate[dateKey] += s.quantity;
-    });
-
-    // Convert to array sorted by date
-    const data = Object.entries(aggregate)
-      .map(([date, quantity]) => ({ date, quantity }))
-      .sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    setChartData(data);
   };
 
   return (
@@ -242,7 +189,7 @@ const SalesEntry = () => {
         </button>
       </form>
 
-      {/* Sales History header with Report Button */}
+      {/* Sales History header with static Show Report button */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-2xl font-bold text-yellow-700 flex items-center gap-2">
           📊 Sales History
@@ -250,10 +197,9 @@ const SalesEntry = () => {
         <button
           onClick={() => navigate("/reports")}
           className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-md transition"
-          aria-expanded={showReport}
           aria-controls="sales-report-section"
         >
-          {showReport ? "Hide Report" : "Show Report"}
+          Show Report
         </button>
       </div>
 
