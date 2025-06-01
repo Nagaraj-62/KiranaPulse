@@ -11,7 +11,7 @@ start cmd /k "cd /d %~dp0 && venv\Scripts\activate && uvicorn backend.main:app -
 REM Step 2: Start React frontend
 echo.
 echo ▶ Starting React frontend...
-start cmd /k "cd grocery-frontend && npm start"
+start cmd /k "cd frontend && npm start"
 
 echo.
 echo ✅ All systems up! Backend and frontend are running in separate terminals.
